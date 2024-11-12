@@ -31,7 +31,7 @@ jobs:
         run: |
           echo "Waiting for Server 1 to be healthy"
           # Implement a wait or health check, e.g., a curl command to check the status of the app
-          # e.g., curl -f http://10.10.10.2:8080/healthcheck
+          e.g., curl -f http://stage2-bd.setlary.xyz/health-check
           sleep 30  # This is just a placeholder; adjust as needed
 
       - name: Deploy to Server 2
@@ -47,7 +47,7 @@ jobs:
         run: |
           echo "Waiting for Server 2 to be healthy"
           # Implement a wait or health check, e.g., a curl command to check the status of the app
-          # e.g., curl -f http://10.10.10.3:8080/healthcheck
+          e.g., curl -f http://stage2-bd.setlary.xyz/health-check
           sleep 30  # Adjust the wait time as needed
           
       - name: Post-deployment verification
