@@ -1,0 +1,37 @@
+name: CI/CD Deployment_BD-Portal
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH Agent
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Pull changes and build Docker image
+        run: |
+          git pull origin main
+
+      - name: Deploy to Server-Portal-1
+        env:
+          DOCKER_HOST: "ssh://ubuntu@43.218.47.52"  # Development Server 1
+        run: |
+          docker-compose -f app/setlary-jakarta-dockerize/docker-compose.yml pull
+          docker-compose -f app/setlary-jakarta-dockerize/docker-compose.yml up -d --no-deps --build
+
+      - name: Deploy to Server-Portal-2
+        env:
+          DOCKER_HOST: "ssh://ubuntu@16.78.132.66"  # Development Server 2
+        run: |
+          docker-compose -f app/setlary-jakarta-dockerize/docker-compose.yml pull
+          docker-compose -f app/setlary-jakarta-dockerize/docker-compose.yml up -d --no-deps --build
