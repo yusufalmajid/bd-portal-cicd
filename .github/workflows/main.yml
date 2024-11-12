@@ -1,37 +1,56 @@
-name: CI/CD Deployment_BD-Portal
+name: Deploy to Servers
 
 on:
   push:
     branches:
-      - main
+      - main  # You can adjust this for your branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up SSH Agent
+      - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Pull changes and build Docker image
+      - name: Deploy to Server 1
         run: |
-          git pull origin main
+          echo "Deploying to Server 1"
+          ssh -o StrictHostKeyChecking=no ubuntu@43.218.47.52 << 'EOF'
+            cd app/bd-portal/ && git pull origin main
+            cd app/setlary-jakarta-dockerize/ && docker-compose up -d
+          EOF
 
-      - name: Deploy to Server-Portal-1
-        env:
-          DOCKER_HOST: "ssh://ubuntu@43.218.47.52"  # Development Server 1
+      - name: Wait for Server 1 to be healthy
         run: |
-          cd app/setlary-jakarta-dockerize/
-          docker-compose up -d
+          echo "Waiting for Server 1 to be healthy"
+          # Implement a wait or health check, e.g., a curl command to check the status of the app
+          # e.g., curl -f http://10.10.10.2:8080/healthcheck
+          sleep 30  # This is just a placeholder; adjust as needed
 
-      - name: Deploy to Server-Portal-2
-        env:
-          DOCKER_HOST: "ssh://ubuntu@16.78.132.66"  # Development Server 2
+      - name: Deploy to Server 2
         run: |
-          docker-compose -f app/setlary-jakarta-dockerize/docker-compose.yml pull
-          docker-compose -f app/setlary-jakarta-dockerize/docker-compose.yml up -d --no-deps --build
+          echo "Deploying to Server 2"
+          ssh -o StrictHostKeyChecking=no ubuntu@16.78.132.66 << 'EOF'
+            cd app/bd-portal/ && git pull origin main
+            cd app/setlary-jakarta-dockerize/ && docker-compose up -d
+          EOF
+
+      - name: Wait for Server 2 to be healthy
+        run: |
+          echo "Waiting for Server 2 to be healthy"
+          # Implement a wait or health check, e.g., a curl command to check the status of the app
+          # e.g., curl -f http://10.10.10.3:8080/healthcheck
+          sleep 30  # Adjust the wait time as needed
+          
+      - name: Post-deployment verification
+        run: |
+          echo "Verifying deployment on both servers"
+          ssh -o StrictHostKeyChecking=no ubuntu@43.218.47.52 'docker ps'
+          ssh -o StrictHostKeyChecking=no ubuntu@16.78.132.66 'docker ps'
+          
