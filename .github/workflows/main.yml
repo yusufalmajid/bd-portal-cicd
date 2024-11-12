@@ -23,14 +23,14 @@ jobs:
           ssh -o StrictHostKeyChecking=no ubuntu@43.218.47.52 << 'EOF'
             cd app/bd-portal/ && git pull origin main
             cd
-            cd app/setlary-jakarta-dockerize/ && docker-compose up -d --remove-orphans --no-deps fe-bd-portal && docker-compose restart fe-bd-portal
+            cd app/setlary-jakarta-dockerize/ && docker-compose up -d --remove-orphans --no-deps fe-bd-portal nginx && docker-compose restart fe-bd-portal nginx
           EOF
 
       - name: Wait for Server 1 to be healthy
         run: |
           echo "Waiting for Server 1 to be healthy"
           curl -k https://stage2-bd.setlary.xyz/health-check
-          sleep 30  # Adjust as needed for your application
+          sleep 120  # Adjust as needed for your application
 
       - name: Verify Server 1
         run: |
@@ -55,14 +55,14 @@ jobs:
           ssh -o StrictHostKeyChecking=no ubuntu@16.78.132.66 << 'EOF'
             cd app/bd-portal/ && git pull origin main
             cd
-            cd app/setlary-jakarta-dockerize/ && docker-compose up -d --remove-orphans --no-deps fe-bd-portal && docker-compose restart fe-bd-portal
+            cd app/setlary-jakarta-dockerize/ && docker-compose up -d --remove-orphans --no-deps fe-bd-portal nginx && docker-compose restart fe-bd-portal nginx
           EOF
 
       - name: Wait for Server 2 to be healthy
         run: |
           echo "Waiting for Server 2 to be healthy"
           curl -k https://stage2-bd.setlary.xyz/health-check
-          sleep 30  # Adjust as needed
+          #sleep 30  # Adjust as needed
 
       - name: Verify Server 2
         run: |
