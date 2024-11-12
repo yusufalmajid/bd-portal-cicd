@@ -27,7 +27,6 @@ jobs:
           DOCKER_HOST: "ssh://ubuntu@43.218.47.52"  # Development Server 1
         run: |
           docker-compose -f app/setlary-jakarta-dockerize/docker-compose.yml pull
-          docker-compose -f app/setlary-jakarta-dockerize/docker-compose.yml up -d --no-deps --build
 
       - name: Deploy to Server-Portal-2
         env:
