@@ -23,7 +23,8 @@ jobs:
           echo "Deploying to Server 1"
           ssh -o StrictHostKeyChecking=no ubuntu@43.218.47.52 << 'EOF'
             cd app/bd-portal/ && git pull origin main
-            cd setlary-jakarta-dockerize/ && docker-compose up -d
+            cd
+            cd app/setlary-jakarta-dockerize/ && docker-compose up -d
           EOF
 
       - name: Wait for Server 1 to be healthy
@@ -38,7 +39,8 @@ jobs:
           echo "Deploying to Server 2"
           ssh -o StrictHostKeyChecking=no ubuntu@16.78.132.66 << 'EOF'
             cd app/bd-portal/ && git pull origin main
-            cd setlary-jakarta-dockerize/ && docker-compose up -d
+            cd
+            cd app/setlary-jakarta-dockerize/ && docker-compose up -d
           EOF
 
       - name: Wait for Server 2 to be healthy
