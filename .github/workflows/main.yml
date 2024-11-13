@@ -20,7 +20,7 @@ jobs:
       - name: Deploy to Server 1
         run: |
           echo "Deploying to Server 1"
-          ssh -o StrictHostKeyChecking=no ubuntu@43.218.47.52 << 'EOF'
+          ssh -o StrictHostKeyChecking=no ubuntu@16.78.177.141 << 'EOF'
             cd app/bd-portal/ && git pull origin main
             cd
             cd app/setlary-jakarta-dockerize/ && docker-compose up -d --remove-orphans --no-deps fe-bd-portal nginx && docker-compose restart fe-bd-portal nginx
@@ -35,7 +35,7 @@ jobs:
       - name: Verify Server 1
         run: |
           echo "Verifying deployment on Server 1"
-          ssh -o StrictHostKeyChecking=no ubuntu@43.218.47.52 'docker ps'
+          ssh -o StrictHostKeyChecking=no ubuntu@16.78.177.141 'docker ps'
 
   deploy-server-2:
     runs-on: ubuntu-latest
