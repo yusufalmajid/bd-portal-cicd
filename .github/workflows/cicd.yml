@@ -21,6 +21,6 @@ jobs:
     - name: Deploy to Server
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@<43.218.72.215> << 'EOF'
-        cd /path/to/deployment
-        git pull origin main
+        cd /efs/app/bd-portal
+        git pull
         EOF
